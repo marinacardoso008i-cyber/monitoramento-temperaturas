@@ -109,3 +109,11 @@ Temperaturas informadas:
 ## Objetivo
 
 O objetivo deste projeto é aplicar conceitos básicos de programação em linguagem C, como variáveis, estruturas de repetição, estruturas condicionais, vetores, entrada de dados, tratamento de erros e cálculos matemáticos.
+
+## Justificativa da Estrutura de Repetição
+
+Escolhi utilizar a estrutura `while` porque o programa precisa continuar recebendo temperaturas enquanto elas forem válidas e estiverem abaixo do limite de 80 °C. O `while` testa a condição antes de executar o bloco, permitindo verificar se o monitoramento deve continuar.
+
+Essa escolha também foi importante porque o usuário pode encerrar o programa voluntariamente ou o programa pode ser encerrado após três erros consecutivos. Nesse caso, a repetição pode ser interrompida antes de uma nova leitura.
+
+Não utilizei `do...while` porque não era necessário garantir uma execução obrigatória do bloco antes de testar a condição. A estrutura `while` se adequou melhor à lógica do monitoramento.
