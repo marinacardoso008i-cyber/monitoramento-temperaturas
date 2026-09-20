@@ -65,8 +65,8 @@ Ao finalizar, o programa apresenta:
 ```text
 desafio-monitoramento/
 │
-├── monitoramento.c
 ├── README.md
+├── monitoramento.c
 │
 └── evidencias/
     ├── teste01.png
