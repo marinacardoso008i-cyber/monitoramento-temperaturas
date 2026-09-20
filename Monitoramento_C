@@ -1,0 +1,157 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+
+#define MAX_TEMPERATURAS 1000
+#define LIMITE_ALERTA 80.0
+#define ZERO_ABSOLUTO -273.15
+
+int main()
+{
+    float temperaturas[MAX_TEMPERATURAS];
+    float temperatura;
+    float soma = 0.0;
+    float maior = 0.0;
+    float menor = 0.0;
+    float media;
+
+    int quantidade = 0;
+    int errosConsecutivos = 0;
+
+    char entrada[100];
+    char *fim;
+
+    printf("========================================\n");
+    printf("     MONITORAMENTO DE TEMPERATURA\n");
+    printf("========================================\n");
+    printf("Digite uma temperatura em Celsius.\n");
+    printf("Digite Q para encerrar o programa.\n\n");
+
+    while (quantidade < MAX_TEMPERATURAS)
+    {
+        printf("Digite a temperatura (°C): ");
+
+        if (fgets(entrada, sizeof(entrada), stdin) == NULL)
+        {
+            break;
+        }
+
+        /* Remove o ENTER da entrada */
+        entrada[strcspn(entrada, "\n")] = '\0';
+
+        /* Permite o encerramento voluntario */
+        if (strcmp(entrada, "Q") == 0 || strcmp(entrada, "q") == 0)
+        {
+            printf("\nPrograma encerrado pelo usuario.\n");
+            break;
+        }
+
+        /* Converte o texto para numero */
+        temperatura = strtof(entrada, &fim);
+
+        /* Verifica se a entrada e um numero valido */
+        if (fim == entrada || *fim != '\0' || !isfinite(temperatura))
+        {
+            errosConsecutivos++;
+
+            printf("ERRO: digite uma temperatura numerica valida.\n");
+            printf("Erros consecutivos: %d de 3\n\n", errosConsecutivos);
+
+            if (errosConsecutivos >= 3)
+            {
+                printf("O programa foi encerrado devido a 3 erros consecutivos.\n");
+                break;
+            }
+
+            continue;
+        }
+
+        /* Verifica o zero absoluto */
+        if (temperatura < ZERO_ABSOLUTO)
+        {
+            errosConsecutivos++;
+
+            printf("ERRO: temperatura abaixo do zero absoluto (-273,15 °C).\n");
+            printf("Erros consecutivos: %d de 3\n\n", errosConsecutivos);
+
+            if (errosConsecutivos >= 3)
+            {
+                printf("O programa foi encerrado devido a 3 erros consecutivos.\n");
+                break;
+            }
+
+            continue;
+        }
+
+        /* Entrada valida, entao zera a contagem de erros */
+        errosConsecutivos = 0;
+
+        temperaturas[quantidade] = temperatura;
+        soma += temperatura;
+
+        /* Define a maior e menor temperatura */
+        if (quantidade == 0)
+        {
+            maior = temperatura;
+            menor = temperatura;
+        }
+        else
+        {
+            if (temperatura > maior)
+            {
+                maior = temperatura;
+            }
+
+            if (temperatura < menor)
+            {
+                menor = temperatura;
+            }
+        }
+
+        quantidade++;
+
+        printf("Temperatura registrada: %.1f °C\n", temperatura);
+
+        /* Verifica o limite de alerta */
+        if (temperatura >= LIMITE_ALERTA)
+        {
+            printf("ALERTA: temperatura acima ou igual ao limite de 80 °C!\n");
+            break;
+        }
+
+        printf("\n");
+    }
+
+    /* Relatorio final */
+    printf("\n========================================\n");
+    printf("          RELATORIO FINAL\n");
+    printf("========================================\n");
+
+    if (quantidade > 0)
+    {
+        media = soma / quantidade;
+
+        printf("Quantidade de temperaturas: %d\n", quantidade);
+        printf("Media das temperaturas: %.2f °C\n", media);
+        printf("Maior temperatura: %.2f °C\n", maior);
+        printf("Menor temperatura: %.2f °C\n", menor);
+
+        printf("\nTemperaturas informadas:\n");
+
+        for (int i = 0; i < quantidade; i++)
+        {
+            printf("%d - %.2f °C\n", i + 1, temperaturas[i]);
+        }
+    }
+    else
+    {
+        printf("Nenhuma temperatura valida foi registrada.\n");
+    }
+
+    printf("\n========================================\n");
+    printf("Programa finalizado.\n");
+    printf("========================================\n");
+
+    return 0;
+}
